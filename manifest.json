@@ -1,12 +1,20 @@
 {
     "name": "BoilerKey - Chrome",
     "version": "1.1",
-    "permissions": ["storage", "https://api-1b9bef70.duosecurity.com/*"],
+    "permissions": ["storage", "https://api-1b9bef70.duosecurity.com/*", "tabs", "*://*.purdue.edu/*", "activeTab",  "webNavigation"],
     "description": "A simple chrome extension that allows you to get your boilerkey passcode in browser",
     "manifest_version": 2,
     "browser_action": {
         "default_title": "BoilerKey - In Browser",
         "default_popup": "dropdown.html"
     },
-    "icons": { "128": "key.png" }
+    "icons": { "128": "key.png" },
+    "content_scripts": [{
+        "matches": ["*://*.purdue.edu/*"],
+        "js": ["dropdown.js", "custom.js"]
+      }], 
+      "background": {
+        "scripts": ["dropdown.js"],
+        "persistent": false
+      }
   }

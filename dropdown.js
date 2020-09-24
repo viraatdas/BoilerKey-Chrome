@@ -32,7 +32,8 @@ class BoilerKey {
 
     let notyf = new Notyf({delay:3000});
     notyf.confirm("Copied to clipboard!");
-
+    
+    return otp;
   }
 
   static sendRequest(url) {
@@ -77,19 +78,49 @@ class BoilerKey {
     })
   }
 
-  static addUrl() {
-    let url = document.getElementById("duo-url").value;
+  static setPUID(puid) {
+    localStorage.setItem("key-puid", puid);
+  }
 
-    if(url.includes("m-1b9bef70.duosecurity.com")) {
-      BoilerKey.sendRequest(url)
+  static setPasscode(passcode) {
+    localStorage.setItem("key-passcode", passcode);
+  }
+
+  static getPUID() {
+    return localStorage.getItem("key-puid");
+  }
+
+  static getPasscode(passcode) {
+    return localStorage.getItem("key-passcode");
+  }
+
+  static addUrl() {
+
+    // checks if passcode is valid
+    function checkValidPasscode(passcode) {
+      return !isNaN(passcode) && parseInt(passcode) > 0 && parseInt(passcode) <= 9999
+    }
+
+    let puid = document.getElementById("duo-puid").value;
+    let passcode = document.getElementById("duo-passcode").value;
+    let url = document.getElementById("duo-url").value;
+    
+
+    if(puid && checkValidPasscode(passcode) && url.includes("m-1b9bef70.duosecurity.com") ) {
+      BoilerKey.setPUID(puid);
+      BoilerKey.setPasscode(passcode);
+      BoilerKey.sendRequest(url);
+    
     } else {
-      alert("You need to enter the proper url!");
+      alert("PUID, passcode, or url not set properly!");
     }
   }
 
   static clearData() {
     localStorage.removeItem("key-hotp");
     localStorage.removeItem("key-counter");
+    localStorage.removeItem("key-passcode");
+    localStorage.removeItem("key-puid");
   }
 
   static incrementCounter() {
@@ -142,5 +173,16 @@ if(!hotpSecret) {
   console.log("doesnt hotp");
 } else {
   setupDiv.style.display = "none";
-  console.log("has have");
+  console.log("has");
+
+  chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+    console.log(sender.tab.id);
+   });
+
+  // chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+  //   chrome.tabs.sendMessage(sender.tab.id, {greeting: "hello"}, function(response) {
+  //     console.log(response.farewell);
+  //   });
+  //  });
+
 }
