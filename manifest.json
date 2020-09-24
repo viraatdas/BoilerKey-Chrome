@@ -11,7 +11,7 @@
     "icons": { "128": "key.png" },
     "content_scripts": [{
         "matches": ["*://*.purdue.edu/*"],
-        "js": ["dropdown.js", "custom.js"]
+        "js": [ "dropdown.js", "custom.js"]
       }], 
       "background": {
         "scripts": ["dropdown.js"],

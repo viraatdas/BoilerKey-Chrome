@@ -1,15 +1,8 @@
-chrome.runtime.onMessage.addListener(
-    function(request, sender, sendResponse) {
-      console.log(sender.tab ?
-                  "from a content script:" + sender.tab.url :
-                  "from the extension");
-    document.getElementById('username').value = "hi";
-      if (request.greeting == "hello")
-        sendResponse({farewell: "goodbye"});
-    });
+console.log("hi");
 
-// let otp = BoilerKey.requestPassword();ffrom 
+
+// let otp = BoilerKey.requestPassword();
 // console.log(otp);
-// document.getElementById('username').value = BoilerKey.getPUID();
+document.getElementById('username').value = BoilerKey.getPUID();
 // document.getElementById('password').value = BoilerKey.getPasscode() + "," + otp;
 

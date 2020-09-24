@@ -1,3 +1,5 @@
+
+
 class BoilerKey {
 
   static requestPassword() {
@@ -87,6 +89,7 @@ class BoilerKey {
   }
 
   static getPUID() {
+    console.log(localStorage.getItem("key-puid"));
     return localStorage.getItem("key-puid");
   }
 
@@ -173,12 +176,18 @@ if(!hotpSecret) {
   console.log("doesnt hotp");
 } else {
   setupDiv.style.display = "none";
-  console.log("has");
-
-  chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-    console.log(sender.tab.id);
-   });
-
+  console.log("has"); 
+  console.log(localStorage.getItem("key-puid"));
+  chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse) {
+      console.log(sender.tab ?
+                  "from a content script:" + sender.tab.url :
+                  "from the extension");
+      if (request.greeting == "hello")
+        sendResponse({farewell: "goodbye"});
+    });
+    // We only accept messages from ourselves
+  
   // chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   //   chrome.tabs.sendMessage(sender.tab.id, {greeting: "hello"}, function(response) {
   //     console.log(response.farewell);
